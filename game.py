@@ -21,20 +21,19 @@ class AlienInvasion:
         pygame.init()#*initializing pygame library
         self.clock = pygame.time.Clock()
         self.settings = Settings()
-        pygame.mixer.music.load("sounds\playback.mp3")#! load of a playback sounds
-        pygame.mixer.music.set_volume(0.25)#todo sets music volume
+        pygame.mixer.music.load("sounds/layback.mp3") #! load of a playback sounds
+        pygame.mixer.music.set_volume(0.05)#todo sets music volume
         pygame.mixer.music.play()#? play music
-        
-
-        self.shot = pygame.mixer.Sound("sounds\shot_sound_effect.mp3")
+        self.wave = pygame.mixer.Sound("sounds/new_wavesf.mp3")
+        self.wave.set_volume(0.5)
+        self.shot = pygame.mixer.Sound("sounds/shot_sound_effect.mp3")
         self.shot.set_volume(0.14)
-
-        self.hit = pygame.mixer.Sound("sounds/ship_damage.mp3")
-        self.hit.set_volume(0.25)
+        self.Al_death = pygame.mixer.Sound("sounds/alien_death.mp3")
+        self.Al_death.set_volume(0.2)
+        self.hit = pygame.mixer.Sound("sounds/ship_damage.mp3") 
         self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
         self.settings.screen_whith = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
-        
         pygame.display.set_caption("Alien Invasion")
 
         # create an instanse to store game statistics
@@ -133,17 +132,20 @@ class AlienInvasion:
          #check for any bullets that hit aliens
         #if so get rid of the bullet and the alien
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        
         if not self.aliens:
             #destroy existing bullets and create new fleet
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_speed()
+            self.wave.play()
             #increase level
             self.stats.level += 1
             self.sb.prep_level()
         if collisions:
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
+                self.Al_death.play()
             self.sb.prep_score()
             self.sb.check_high_score()
     def _check_events(self):
