@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 __pycache__/alien.cpython-312.pyc
 __pycache__/bullet.cpython-312.pyc
 __pycache__/button.cpython-312.pyc
@@ -6,3 +7,6 @@ __pycache__/scoreboard.cpython-312.pyc
 __pycache__/setting.cpython-312.pyc
 __pycache__/spaceship.cpython-312.pyc
 __pycache__/stars.cpython-312.pyc
+=======
+
+>>>>>>> fadf7bfc52e19d46bc583be88ec0892412efda2e
