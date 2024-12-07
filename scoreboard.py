@@ -10,7 +10,9 @@ class Scoreboard:
         self.screen_rect = self.screen.get_rect()
         self.settings = ai_game.settings
         self.stats = ai_game.stats
-
+        self.score_high = pygame.mixer.Sound("sounds/new_highscore.mp3")
+        self.score_high.set_volume(0.2)
+        self.new_high_score = False
         #font settings for scoring information
         self.text_color = (255,255,255)
         self.font = pygame.font.SysFont(None, 48)
@@ -50,9 +52,18 @@ class Scoreboard:
     
     def check_high_score(self):
         """check to see if there a new high score"""
-        if self.stats.score > self.stats.high_score:
+        if (self.stats.score > self.stats.high_score) and self.new_high_score != True:
+            self.stats.high_score = self.stats.score
+            self.score_high.play()
+            self.prep_high_score()
+            self.new_high_score = True
+            
+
+        if self.stats.score > self.stats.high_score :
             self.stats.high_score = self.stats.score
             self.prep_high_score()
+           
+            
     def prep_level(self):
         """turn the level into a rendered image"""
         level_str = str(self.stats.level)

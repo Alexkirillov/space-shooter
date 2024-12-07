@@ -30,6 +30,8 @@ class AlienInvasion:
         self.shot.set_volume(0.14)
         self.Al_death = pygame.mixer.Sound("sounds/alien_death.mp3")
         self.Al_death.set_volume(0.2)
+        self.lost_game = pygame.mixer.Sound("sounds/game_lost.mp3")
+        self.lost_game.set_volume(0.5)
         self.hit = pygame.mixer.Sound("sounds/ship_damage.mp3") 
         self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
         self.settings.screen_whith = self.screen.get_rect().width
@@ -148,6 +150,8 @@ class AlienInvasion:
                 self.Al_death.play()
             self.sb.prep_score()
             self.sb.check_high_score()
+
+
     def _check_events(self):
         """respond to keypresses and mouse events."""
         for event in pygame.event.get():
@@ -225,6 +229,7 @@ class AlienInvasion:
         else:
             self.game_active = False
             pygame.mouse.set_visible(True)
+            self.lost_game.play()
 
     def _check_play_button(self, mouse_pos):
         """start a new game when the player clicks play"""
