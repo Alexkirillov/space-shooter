@@ -2,7 +2,7 @@ from pygame import sprite
 from pygame import *
 
 class Explosion(sprite.Sprite):
-    def __init__(self):
+    def __init__(self,enemy_x,enemy_y):
         super().__init__()
         self.images = []
         for num in range(1,6):
@@ -12,7 +12,7 @@ class Explosion(sprite.Sprite):
         self.index = 0
         self.image = self.images[self.index]
         self.rect = self.image.get_rect()
-        self.rect.center = [850,500]
+        self.rect.center = [enemy_x,enemy_y]
         self.counter = 0
     
     def update(self):
