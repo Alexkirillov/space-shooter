@@ -2,14 +2,16 @@ from pygame import sprite
 from pygame import *
 
 class Explosion(sprite.Sprite):
-    def _init_(self):
-        super()._init_()
-        self.images[]
+    def __init__(self):
+        super().__init__()
+        self.images = []
         for num in range(1,6):
-            img = image.load()
-            img.transform.scale(img(100,100))
+            img = image.load(f"animations/img/exp{num}.png")
+            img = transform.scale(img,(100,100))
+            self.images.append(img)
         self.index = 0
         self.image = self.images[self.index]
+        self.rect = self.image.get_rect()
         self.rect.center = [850,500]
         self.counter = 0
     

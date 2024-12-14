@@ -1,5 +1,6 @@
 #my first big project
 import sys
+from explosions import Explosion
 from pathlib import Path
 import json
 from time import sleep
@@ -21,17 +22,18 @@ class AlienInvasion:
         pygame.init()#*initializing pygame library
         self.clock = pygame.time.Clock()
         self.settings = Settings()
+        #! ALL THE SOUND EFFECTS
         pygame.mixer.music.load("sounds/layback.mp3") #! load of a playback sounds
         pygame.mixer.music.set_volume(0.05)#todo sets music volume
         pygame.mixer.music.play()#? play music
         self.wave = pygame.mixer.Sound("sounds/new_wavesf.mp3")
-        self.wave.set_volume(0.5)
+        self.wave.set_volume(0.1)
         self.shot = pygame.mixer.Sound("sounds/shot_sound_effect.mp3")
         self.shot.set_volume(0.14)
         self.Al_death = pygame.mixer.Sound("sounds/alien_death.mp3")
-        self.Al_death.set_volume(0.2)
+        self.Al_death.set_volume(0.1)
         self.lost_game = pygame.mixer.Sound("sounds/game_lost.mp3")
-        self.lost_game.set_volume(0.5)
+        self.lost_game.set_volume(0.1)
         self.hit = pygame.mixer.Sound("sounds/ship_damage.mp3") 
         self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
         self.settings.screen_whith = self.screen.get_rect().width
@@ -48,6 +50,8 @@ class AlienInvasion:
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
+        self.explosion_group = pygame.sprite.Group()
+
         
         #START alien invasion in an inactive state
         self.game_active = False
@@ -145,6 +149,8 @@ class AlienInvasion:
             self.stats.level += 1
             self.sb.prep_level()
         if collisions:
+            explosions = Explosion()
+            self.explosion_group.add(explosions)
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
                 self.Al_death.play()
@@ -199,6 +205,8 @@ class AlienInvasion:
         
         self.ship.blitme()
         self.aliens.draw(self.screen)
+        self.explosion_group.draw(self.screen)
+        self.explosion_group.update() 
 
         # draw the score information
         self.sb.show_score()
