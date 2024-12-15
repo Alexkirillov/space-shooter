@@ -17,6 +17,7 @@ from spaceship import Ship
 random_1 = randint(10,20)
 random_2 = randint(10,20)
 random_3 = randint(10,20)
+
 class AlienInvasion:
     def __init__(self):
         pygame.init()#*initializing pygame library
@@ -150,9 +151,9 @@ class AlienInvasion:
         if collisions:
             get_enemies = list(collisions.values())
             for alien_colision in get_enemies:
-                enemy_x, enemy_y = alien_colision[0].rect.x, alien_colision[0].rect.y
-                explosions = Explosion(enemy_x,enemy_y)
-                self.explosion_group.add(explosions)
+                enemy_x, enemy_y = alien_colision[0].rect.centerx, alien_colision[0].rect.centery
+                self.explosions = Explosion(enemy_x,enemy_y)
+                self.explosion_group.add(self.explosions)
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
                 self.Al_death.play()
