@@ -1,4 +1,3 @@
-from pygame import sprite
 from pygame import *
 
 class Explosion(sprite.Sprite):
@@ -17,10 +16,10 @@ class Explosion(sprite.Sprite):
     
     def update(self):
         explosion_speed = 4
-        self.counter +1
+        self.counter +=1
         if self.counter >= explosion_speed and self.index < len(self.images) -1:
             self.counter = 0
             self.index +=1
-            self.images = self.images[self.index]
+            self.image = self.images[self.index]
         if self.index >= len(self.images) -1 and self.counter >= explosion_speed:
             self.kill()
