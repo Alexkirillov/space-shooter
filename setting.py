@@ -1,3 +1,4 @@
+from random import randint
 class Settings:
     """a class to store all settings for Alien invasion"""
     def __init__(self):
@@ -19,7 +20,7 @@ class Settings:
         self.alien_speed = 1.5
         self.fleet_drop_speed = 15
         #meteor speed
-        self.meteor_speed = 20
+        #self.meteor_speed = randint(1,4)
         # fleet_direction of 1 represents right; -1 represents left
         self.fleet_direction = 1
         #how quickly the game speeds up

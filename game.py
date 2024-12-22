@@ -4,6 +4,7 @@ from explosions import Explosion
 from pathlib import Path
 import json
 from time import sleep
+from meteor import Meteor
 from random import randint
 from stars import Star
 from button import Button
@@ -52,7 +53,7 @@ class AlienInvasion:
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self.explosion_group = pygame.sprite.Group()
-
+        self.meteor_group = pygame.sprite.Group()
         
         #START alien invasion in an inactive state
         self.game_active = False
@@ -61,6 +62,8 @@ class AlienInvasion:
         #self.all_time_high_score = [] using later for saving file results
         self._create_fleet()
         self._stars()
+        self._meteor_obstacle()
+        print(len(self.meteor_group))
     def _create_fleet(self):
         """create a fleet of aliens"""
         #create an alien and keep ading aliens intil there is no room left
@@ -103,10 +106,21 @@ class AlienInvasion:
                 self._change_fleet_direction()
                 break
     def _change_fleet_direction(self):
+
         """drop the intire fleet and change the fleets direction."""
         for alien in self.aliens.sprites():
             alien.rect.y += self.settings.fleet_drop_speed
         self.settings.fleet_direction *= -1
+    
+    def _meteor_obstacle(self):#!call method somewhere so meteor dont constantly spawn
+        for meteors in range(5):
+            new_meteor = Meteor(self)
+            new_meteor.rect.x = randint(1,1980)
+            new_meteor.rect.y = 1
+            self.meteor_group.add(new_meteor)
+        
+
+
     def _stars(self):
         star = Star(self)
         star_width, star_height = star.rect.size
@@ -159,8 +173,6 @@ class AlienInvasion:
                 self.Al_death.play()
             self.sb.prep_score()
             self.sb.check_high_score()
-
-
     def _check_events(self):
         """respond to keypresses and mouse events."""
         for event in pygame.event.get():
@@ -209,13 +221,23 @@ class AlienInvasion:
         self.ship.blitme()
         self.aliens.draw(self.screen)
         self.explosion_group.draw(self.screen)
-        self.explosion_group.update() 
-
+        self.explosion_group.update()
         # draw the score information
         self.sb.show_score()
         #Draw the play button if the game is inactive
         if not self.game_active:
             self.play_button.draw_button()
+        else:
+            self.meteor_group.draw(self.screen)
+            if len(self.meteor_group) < 5:
+                new_meteor = Meteor(self)
+                new_meteor.rect.x = randint(1,1980)
+                new_meteor.rect.y = 1
+                self.meteor_group.add(new_meteor)
+        
+                
+                
+
         
         pygame.display.flip()
     def _ship_hit(self):
@@ -241,7 +263,6 @@ class AlienInvasion:
             self.game_active = False
             pygame.mouse.set_visible(True)
             self.lost_game.play()
-
     def _check_play_button(self, mouse_pos):
         """start a new game when the player clicks play"""
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
@@ -266,9 +287,6 @@ class AlienInvasion:
             pygame.mouse.set_visible(False)
             #reset the game settings
             self.settings.initialize_dynamic_settings()
-
-
-
     def _check_aliens_bottom(self):
         """check if any aliens have reached the bottom"""
         for alien in self.aliens.sprites():
@@ -276,11 +294,11 @@ class AlienInvasion:
                 #treat this the same as if thhe ship got hit
                 self._ship_hit()
                 break
-
     def run_game(self):
         while True:
             self._check_events()
             if self.game_active:
+                self.meteor_group.update()
                 self.ship.update()
                 self._update_bullets()
                 self._update_aliens()
