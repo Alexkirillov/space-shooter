@@ -37,6 +37,7 @@ class AlienInvasion:
         self.lost_game = pygame.mixer.Sound("sounds/game_lost.mp3")
         self.lost_game.set_volume(0.1)
         self.hit = pygame.mixer.Sound("sounds/ship_damage.mp3") 
+      
         self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
         self.settings.screen_whith = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
@@ -96,9 +97,44 @@ class AlienInvasion:
         #look for alien-ship collisions.
         if pygame.sprite.spritecollideany(self.ship,self.aliens):
             self._ship_hit()
-        
         #look for aliens hitting the bottom of the screen
         self._check_aliens_bottom()
+
+    def _update_meteors(self):
+        self.meteor_group.draw(self.screen)
+        collide_meteor = pygame.sprite.spritecollide(self.ship,self.meteor_group,True)
+        if len(self.meteor_group) < 5:
+            new_meteor = Meteor(self)
+            new_meteor.rect.x = randint(1,1980)
+            new_meteor.rect.y = 1
+            self.meteor_group.add(new_meteor)
+        if collide_meteor:
+            for collide in collide_meteor:
+                
+                print(collide_meteor)
+                get_meteor = list(collide_meteor.values())
+                for meteor_colision in get_meteor:
+                    meteor_x, meteor_y = meteor_colision[0].rect.centerx, meteor_colision[0].rect.centery
+                    self.explosions = Explosion(meteor_x,meteor_y, self.settings.meteor_img)
+                    self.explosion_group.add(self.explosions)
+                self._ship_hit_meteor()
+                collide.kill()
+    def _ship_hit_meteor(self):
+
+        """respond to the ship being hit by an alien."""
+        if self.stats.ships_left > 0:
+            #decrement ships_left
+            self.stats.ships_left -= 1
+            self.sb.prep_ships() 
+            self.hit.set_volume(0.05)
+            self.hit.play()
+            # pause
+               
+        else:
+            self.game_active = False
+            pygame.mouse.set_visible(True)
+            self.lost_game.play()
+
     def _check_fleet_edges(self):
         """respnd appropriately if any aliens have reached the edge"""
         for alien in self.aliens.sprites():
@@ -119,8 +155,6 @@ class AlienInvasion:
             new_meteor.rect.y = 1
             self.meteor_group.add(new_meteor)
         
-
-
     def _stars(self):
         star = Star(self)
         star_width, star_height = star.rect.size
@@ -166,7 +200,7 @@ class AlienInvasion:
             get_enemies = list(collisions.values())
             for alien_colision in get_enemies:
                 enemy_x, enemy_y = alien_colision[0].rect.centerx, alien_colision[0].rect.centery
-                self.explosions = Explosion(enemy_x,enemy_y)
+                self.explosions = Explosion(enemy_x,enemy_y, self.settings.img)
                 self.explosion_group.add(self.explosions)
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
@@ -228,13 +262,7 @@ class AlienInvasion:
         if not self.game_active:
             self.play_button.draw_button()
         else:
-            self.meteor_group.draw(self.screen)
-            if len(self.meteor_group) < 5:
-                new_meteor = Meteor(self)
-                new_meteor.rect.x = randint(1,1980)
-                new_meteor.rect.y = 1
-                self.meteor_group.add(new_meteor)
-        
+            self._update_meteors()
                 
                 
 
@@ -247,6 +275,7 @@ class AlienInvasion:
             #decrement ships_left
             self.stats.ships_left -= 1
             self.sb.prep_ships() 
+            self.hit.set_volume(0.05)
             self.hit.play()
             
 

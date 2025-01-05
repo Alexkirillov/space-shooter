@@ -1,11 +1,11 @@
 from pygame import *
 
 class Explosion(sprite.Sprite):
-    def __init__(self,enemy_x,enemy_y):
+    def __init__(self,enemy_x, enemy_y, anim_dir):
         super().__init__()
         self.images = []
         for num in range(1,6):
-            img = image.load(f"animations/img/exp{num}.png")
+            img = image.load(f"animations/{anim_dir}/exp{num}.png")
             img = transform.scale(img,(100,100))
             self.images.append(img)
         self.index = 0

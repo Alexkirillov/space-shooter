@@ -19,6 +19,8 @@ class Settings:
         #Alien settings
         self.alien_speed = 1.5
         self.fleet_drop_speed = 15
+        self.img = "img"
+        self.meteor_img = "meteor_img"
         #meteor speed
         #self.meteor_speed = randint(1,4)
         # fleet_direction of 1 represents right; -1 represents left
