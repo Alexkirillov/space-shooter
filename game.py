@@ -103,22 +103,21 @@ class AlienInvasion:
     def _update_meteors(self):
         self.meteor_group.draw(self.screen)
         collide_meteor = pygame.sprite.spritecollide(self.ship,self.meteor_group,True)
+        if collide_meteor:
+            for collide in collide_meteor:
+                get_meteor = collide
+                print(get_meteor)
+                meteor_x, meteor_y = collide.rect.centerx, collide.rect.centery
+                self.explosions = Explosion(meteor_x,meteor_y, self.settings.meteor_img)
+                self.explosion_group.add(self.explosions)
+                self._ship_hit_meteor()
+                collide.kill()
         if len(self.meteor_group) < 5:
             new_meteor = Meteor(self)
             new_meteor.rect.x = randint(1,1980)
             new_meteor.rect.y = 1
             self.meteor_group.add(new_meteor)
-        if collide_meteor:
-            for collide in collide_meteor:
-                
-                print(collide_meteor)
-                get_meteor = list(collide_meteor.values())
-                for meteor_colision in get_meteor:
-                    meteor_x, meteor_y = meteor_colision[0].rect.centerx, meteor_colision[0].rect.centery
-                    self.explosions = Explosion(meteor_x,meteor_y, self.settings.meteor_img)
-                    self.explosion_group.add(self.explosions)
-                self._ship_hit_meteor()
-                collide.kill()
+
     def _ship_hit_meteor(self):
 
         """respond to the ship being hit by an alien."""
@@ -175,6 +174,7 @@ class AlienInvasion:
             new_star.rect.y = randint(1,1000)
             self.stars.add(new_star) 
     def _update_bullets(self):
+
         """update position of bullets and get rid of old bullets"""
         # update bullet position.
         self.bullets.update()
@@ -183,6 +183,9 @@ class AlienInvasion:
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
         self._check_bullet_alien_collisions()
+        self._check_meteor_bullet_colisions()
+    def _check_meteor_bullet_colisions(self):
+        bullet_meteor_colisions = pygame.sprite.groupcollide(self.bullets,self.meteor_group,True, False)
     def _check_bullet_alien_collisions(self):
          #check for any bullets that hit aliens
         #if so get rid of the bullet and the alien
@@ -306,6 +309,7 @@ class AlienInvasion:
             #get rid of any remaining bullets and aliens.
             self.bullets.empty()
             self.aliens.empty()
+            self.meteor_group.empty()
 
             #create a new fleet and center the ship
            

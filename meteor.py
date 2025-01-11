@@ -13,7 +13,7 @@ class Meteor(Sprite):
         self.speed = randint(1,3)
         #load the alien image and set its rect attribute.
         """transform.scale method for changing images size"""
-        self.image = pygame.transform.scale(pygame.image.load("images/alien_ship_python.png"),(120,120))
+        self.image = pygame.transform.scale(pygame.image.load("images/exp1.png"),(100,100))
         self.rect = self.image.get_rect()
 
         #store the aliens exact horizontal position
