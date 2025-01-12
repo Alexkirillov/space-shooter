@@ -208,7 +208,7 @@ class AlienInvasion:
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
                 self.Al_death.play()
-            self.sb.prep_score()
+            self.sFb.prep_score()
             self.sb.check_high_score()
     def _check_events(self):
         """respond to keypresses and mouse events."""
