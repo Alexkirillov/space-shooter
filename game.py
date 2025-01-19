@@ -1,5 +1,6 @@
 #my first big project
 import sys
+from boss import Boss
 from explosions import Explosion
 from pathlib import Path
 import json
@@ -55,6 +56,7 @@ class AlienInvasion:
         self.aliens = pygame.sprite.Group()
         self.explosion_group = pygame.sprite.Group()
         self.meteor_group = pygame.sprite.Group()
+        self.boss_group = pygame.sprite.Group()
         
         #START alien invasion in an inactive state
         self.game_active = False
@@ -184,6 +186,11 @@ class AlienInvasion:
                 self.bullets.remove(bullet)
         self._check_bullet_alien_collisions()
         self._check_meteor_bullet_colisions()
+    def _boss_spawn(self):
+        """spawns boss every even round"""
+        self.boss = Boss()
+        if self.stats.level % 2 == 0 :
+            self.boss_group
     def _check_meteor_bullet_colisions(self):
         bullet_meteor_colisions = pygame.sprite.groupcollide(self.bullets,self.meteor_group,True, False)
     def _check_bullet_alien_collisions(self):
@@ -192,12 +199,14 @@ class AlienInvasion:
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
         if not self.aliens:
             #destroy existing bullets and create new fleet
-            self.bullets.empty()
-            self._create_fleet()
-            self.settings.increase_speed()
-            self.wave.play()
+            
+            #self._create_fleet()
             #increase level
-            self.stats.level += 1
+            if self.stats.level % 2 != 0:
+                self.stats.level += 1
+                self.settings.increase_speed()
+                self.wave.play()
+                self.bullets.empty()
             self.sb.prep_level()
         if collisions:
             get_enemies = list(collisions.values())
@@ -208,7 +217,7 @@ class AlienInvasion:
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
                 self.Al_death.play()
-            self.sFb.prep_score()
+            self.sb.prep_score()
             self.sb.check_high_score()
     def _check_events(self):
         """respond to keypresses and mouse events."""
@@ -247,18 +256,17 @@ class AlienInvasion:
             self.bullets.add(new_bullet)
             self.shot.play()
     def _update_screen(self):
-
-
-    
+        #this method is for placing most objects on the screen
         self.screen.fill(self.settings.bg_color)
         self.stars.draw(self.screen)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         
         self.ship.blitme()
-        self.aliens.draw(self.screen)
-        self.explosion_group.draw(self.screen)
-        self.explosion_group.update()
+        if self.stats.level % 2 != 0:
+            self.aliens.draw(self.screen)
+            self.explosion_group.draw(self.screen)
+            self.explosion_group.update()
         # draw the score information
         self.sb.show_score()
         #Draw the play button if the game is inactive
@@ -266,7 +274,8 @@ class AlienInvasion:
             self.play_button.draw_button()
         else:
             self._update_meteors()
-                
+        if self.stats.level % 2 == 0:
+            self.boss_group.draw(self.screen)
                 
 
         
@@ -287,8 +296,9 @@ class AlienInvasion:
             self.aliens.empty()
 
             #create a new fleet and center the ship
-            self._create_fleet()
-            self.ship.center_ship()
+            if self.stats.level % 2 != 0:
+                self._create_fleet()
+                self.ship.center_ship()
             # pause
             sleep(0.5)     
         else:
@@ -334,7 +344,11 @@ class AlienInvasion:
                 self.meteor_group.update()
                 self.ship.update()
                 self._update_bullets()
-                self._update_aliens()
+                if self.stats.level % 2 != 0:
+                    self._update_aliens()
+                else:
+                    self.aliens.empty()
+
             self._update_screen()
             self.clock.tick(60)
 if __name__ == "__main__":

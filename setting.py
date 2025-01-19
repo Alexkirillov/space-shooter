@@ -17,8 +17,8 @@ class Settings:
         self.bullet_color = (255,255,255)
         self.bullets_allowed = 5
         #Alien settings
-        self.alien_speed = 1.5
-        self.fleet_drop_speed = 15
+        self.alien_speed = 1.0
+        self.fleet_drop_speed = 10
         self.img = "img"
         self.meteor_img = "meteor_img"
         #meteor speed
@@ -36,9 +36,9 @@ class Settings:
         """initialize settings that change throughout the game"""
         self.ship_speed = 3.5
         self.bullet_speed = 4.0
-        self.alien_speed = 1.5
+        self.alien_speed = 1.0
         self.alien_points = 50
-        self.bullets_allowed = 5
+        self.bullets_allowed = 5000
 
         #fleet_directin of 1 represents right and -1 represents left
         self.fleet_direction = 1
