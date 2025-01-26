@@ -1,4 +1,5 @@
-from random import randint
+from random import randint, random
+
 import pygame
 from pygame.sprite import Sprite
 
@@ -10,7 +11,7 @@ class Meteor(Sprite):
         super().__init__()
         self.screen = ai_game.screen
         self.settings = ai_game.settings
-        self.speed = randint(1,3)
+        self.speed = random() + randint(1,2)
         #load the alien image and set its rect attribute.
         """transform.scale method for changing images size"""
         self.image = pygame.transform.scale(pygame.image.load("images/exp1.png"),(100,100))

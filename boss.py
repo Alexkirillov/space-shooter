@@ -11,7 +11,7 @@ class Boss(Sprite):
         
         #bosses correct size.
         """transform.scale method for changing images size"""
-        self.image = pygame.transform.scale(pygame.image.load("images/boss.png"),(250,250))
+        self.image = pygame.transform.scale(pygame.image.load("images/boss.png"),(380,250))
         self.rect = self.image.get_rect()
 
         # start each new alien near the top left of the screen

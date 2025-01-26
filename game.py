@@ -44,6 +44,8 @@ class AlienInvasion:
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
 
+        #makes boss inactive
+        self.boss_is_show = False
         # create an instanse to store game statistics
         # and create a scoreboard
 
@@ -58,16 +60,17 @@ class AlienInvasion:
         self.meteor_group = pygame.sprite.Group()
         self.boss_group = pygame.sprite.Group()
         
+        
         #START alien invasion in an inactive state
         self.game_active = False
         #make the play button
         self.play_button = Button(self, "Play")
         #self.all_time_high_score = [] using later for saving file results
-        self._create_fleet()
+        self._create_fleet_()
         self._stars()
         self._meteor_obstacle()
-        print(len(self.meteor_group))
-    def _create_fleet(self):
+        
+    def _create_fleet_(self):
         """create a fleet of aliens"""
         #create an alien and keep ading aliens intil there is no room left
         #spacing between aliens is one alien width
@@ -107,8 +110,6 @@ class AlienInvasion:
         collide_meteor = pygame.sprite.spritecollide(self.ship,self.meteor_group,True)
         if collide_meteor:
             for collide in collide_meteor:
-                get_meteor = collide
-                print(get_meteor)
                 meteor_x, meteor_y = collide.rect.centerx, collide.rect.centery
                 self.explosions = Explosion(meteor_x,meteor_y, self.settings.meteor_img)
                 self.explosion_group.add(self.explosions)
@@ -186,11 +187,16 @@ class AlienInvasion:
                 self.bullets.remove(bullet)
         self._check_bullet_alien_collisions()
         self._check_meteor_bullet_colisions()
+    
     def _boss_spawn(self):
         """spawns boss every even round"""
-        self.boss = Boss()
-        if self.stats.level % 2 == 0 :
-            self.boss_group
+        self.boss = Boss(self)
+        self.boss_group.add(self.boss)
+        self.boss_is_show = False
+                
+    def _boss_hp(self):
+        """makes a cycle that is bosses hp"""      
+        pass
     def _check_meteor_bullet_colisions(self):
         bullet_meteor_colisions = pygame.sprite.groupcollide(self.bullets,self.meteor_group,True, False)
     def _check_bullet_alien_collisions(self):
@@ -206,7 +212,8 @@ class AlienInvasion:
                 self.stats.level += 1
                 self.settings.increase_speed()
                 self.wave.play()
-                self.bullets.empty()
+                self.bullets.empty()  
+                self.boss_is_show = True              
             self.sb.prep_level()
         if collisions:
             get_enemies = list(collisions.values())
@@ -276,7 +283,11 @@ class AlienInvasion:
             self._update_meteors()
         if self.stats.level % 2 == 0:
             self.boss_group.draw(self.screen)
-                
+            if self.boss_is_show:
+                self._boss_spawn()
+        else:
+            self.boss_group.empty()
+                 
 
         
         pygame.display.flip()
@@ -323,7 +334,7 @@ class AlienInvasion:
 
             #create a new fleet and center the ship
            
-            self._create_fleet()
+            self._create_fleet_()
             self.ship.center_ship()
 
             # hide the mouse cursor.
