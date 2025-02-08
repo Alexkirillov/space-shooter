@@ -149,7 +149,7 @@ class AlienInvasion:
         for alien in self.aliens.sprites():
             alien.rect.y += self.settings.fleet_drop_speed
         self.settings.fleet_direction *= -1
-    
+
     def _meteor_obstacle(self):#!call method somewhere so meteor dont constantly spawn
         for meteors in range(5):
             new_meteor = Meteor(self)
@@ -193,10 +193,17 @@ class AlienInvasion:
         self.boss = Boss(self)
         self.boss_group.add(self.boss)
         self.boss_is_show = False
-                
-    def _boss_hp(self):
-        """makes a cycle that is bosses hp"""      
-        pass
+        
+    
+
+    def _check_bulets_boss_colision(self):
+        collisions = pygame.sprite.groupcollide(self.bullets,self.boss_group,True,False)  
+        if collisions:
+            self.boss.boss_hp = self.boss.boss_hp - 1
+            print(self.boss.boss_hp)
+        if self.boss.boss_hp <= 0:
+            self.boss_group.empty()
+    
     def _check_meteor_bullet_colisions(self):
         bullet_meteor_colisions = pygame.sprite.groupcollide(self.bullets,self.meteor_group,True, False)
     def _check_bullet_alien_collisions(self):
@@ -285,10 +292,12 @@ class AlienInvasion:
             self.boss_group.draw(self.screen)
             if self.boss_is_show:
                 self._boss_spawn()
+            self.boss.update()
         else:
             self.boss_group.empty()
-                 
-
+        
+        if self.boss_is_show == True:
+            self._check_bulets_boss_colision()
         
         pygame.display.flip()
     def _ship_hit(self):

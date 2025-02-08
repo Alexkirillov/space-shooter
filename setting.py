@@ -37,6 +37,7 @@ class Settings:
         self.ship_speed = 3.5
         self.bullet_speed = 4.0
         self.alien_speed = 1.0
+        self.boss_speed = 2.0
         self.alien_points = 50
         self.bullets_allowed = 5000
 
