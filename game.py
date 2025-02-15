@@ -59,7 +59,7 @@ class AlienInvasion:
         self.explosion_group = pygame.sprite.Group()
         self.meteor_group = pygame.sprite.Group()
         self.boss_group = pygame.sprite.Group()
-        
+        self.explosion_group_boss = pygame.sprite.Group()
         
         #START alien invasion in an inactive state
         self.game_active = False
@@ -104,7 +104,9 @@ class AlienInvasion:
             self._ship_hit()
         #look for aliens hitting the bottom of the screen
         self._check_aliens_bottom()
-
+    def _boss_explosion(self):
+        self.explosions = Explosion(self.boss.rect.centerx,self.boss.rect.centery, self.settings.boss_img)
+        self.explosion_group_boss.add(self.explosions)
     def _update_meteors(self):
         self.meteor_group.draw(self.screen)
         collide_meteor = pygame.sprite.spritecollide(self.ship,self.meteor_group,True)
@@ -293,11 +295,10 @@ class AlienInvasion:
             if self.boss_is_show:
                 self._boss_spawn()
             self.boss.update()
+            self._check_bulets_boss_colision()
         else:
             self.boss_group.empty()
-        
-        if self.boss_is_show == True:
-            self._check_bulets_boss_colision()
+
         
         pygame.display.flip()
     def _ship_hit(self):
