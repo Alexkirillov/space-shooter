@@ -194,9 +194,10 @@ class AlienInvasion:
         self.boss_is_show = False
         
     def _check_bulets_boss_colision(self):
-        collisions = pygame.sprite.groupcollide(self.bullets,self.boss_group,True,False)  
-        if collisions:
+        collisions = pygame.sprite.groupcollide(self.bullets, self.boss_group, True, False)  
+        if collisions and self.boss.boss_hp > 0:
             self.boss.boss_hp = self.boss.boss_hp - 1
+            self._boss_explosion() #! problem 2 - boss_explosion
             print(self.boss.boss_hp)
         if self.boss.boss_hp <= 0:
             self.boss_group.empty()
@@ -295,6 +296,8 @@ class AlienInvasion:
                 self._boss_spawn()
             self.boss.update()
             self._check_bulets_boss_colision()
+            self.explosion_group_boss.draw(self.screen) #! ploblem 3 - draw explosion 
+            self.explosion_group_boss.update()
         else:
             self.boss_group.empty()
         pygame.display.flip()
