@@ -21,7 +21,7 @@ class Settings:
         self.fleet_drop_speed = 10
         self.img = "img"
         self.meteor_img = "meteor_img"
-        self.boss_img = "boss_exp"
+        self.boss_img = "boss.exp"
         #meteor speed
         #self.meteor_speed = randint(1,4)
         # fleet_direction of 1 represents right; -1 represents left
@@ -38,7 +38,7 @@ class Settings:
         self.ship_speed = 3.5
         self.bullet_speed = 4.0
         self.alien_speed = 1.0
-        self.boss_speed = 2.0
+        self.boss_speed = 2.0 
         self.alien_points = 50
         self.bullets_allowed = 5000
 

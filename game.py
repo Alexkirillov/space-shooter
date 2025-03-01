@@ -11,7 +11,7 @@ from stars import Star
 from button import Button
 from scoreboard import Scoreboard
 import pygame
-from bullet import Bullet
+from bullet import Bullet, Boss_bullets
 from alien import Alien
 from setting import Settings
 from game_stats import GameStats
@@ -60,6 +60,7 @@ class AlienInvasion:
         self.meteor_group = pygame.sprite.Group()
         self.boss_group = pygame.sprite.Group()
         self.explosion_group_boss = pygame.sprite.Group()
+        self.boss_bullets = pygame.sprite.Group()
         
         #START alien invasion in an inactive state
         self.game_active = False
@@ -105,8 +106,9 @@ class AlienInvasion:
         #look for aliens hitting the bottom of the screen
         self._check_aliens_bottom()
     def _boss_explosion(self):
-        self.explosions = Explosion(self.boss.rect.centerx,self.boss.rect.centery, self.settings.boss_img)
-        self.explosion_group_boss.add(self.explosions)
+        if self.boss.boss_hp <= 0:
+            self.explosion = Explosion(self.boss.rect.centerx,self.boss.rect.centery, self.settings.boss_img)
+            self.explosion_group_boss.add(self.explosion)
     def _update_meteors(self):
         self.meteor_group.draw(self.screen)
         collide_meteor = pygame.sprite.spritecollide(self.ship,self.meteor_group,True)
@@ -179,14 +181,19 @@ class AlienInvasion:
             new_star.rect.y = randint(1,1000)
             self.stars.add(new_star) 
     def _update_bullets(self):
-
+        
         """update position of bullets and get rid of old bullets"""
         # update bullet position.
         self.bullets.update()
+        self.boss_bullets.update()
         # get rid of bullets that have disappeared.
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
+
+        for boss_bullet_shot in self.boss_bullets.copy():
+            if boss_bullet_shot.rect.bottom >= 1000:
+                self.boss_bullets.remove(boss_bullet_shot)
         self._check_bullet_alien_collisions()
         self._check_meteor_bullet_colisions()
     
@@ -195,9 +202,7 @@ class AlienInvasion:
         self.boss = Boss(self)
         self.boss_group.add(self.boss)
         self.boss_is_show = False
-        
     
-
     def _check_bulets_boss_colision(self):
         collisions = pygame.sprite.groupcollide(self.bullets,self.boss_group,True,False)  
         if collisions:
@@ -205,6 +210,8 @@ class AlienInvasion:
             print(self.boss.boss_hp)
         if self.boss.boss_hp <= 0:
             self.boss_group.empty()
+            self.explosion_group_boss.draw(self.screen)
+            self.explosion_group_boss.update()
     
     def _check_meteor_bullet_colisions(self):
         bullet_meteor_colisions = pygame.sprite.groupcollide(self.bullets,self.meteor_group,True, False)
@@ -271,18 +278,27 @@ class AlienInvasion:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
             self.shot.play()
+    def _boss_bullet_attack(self):
+        if len(self.boss_bullets) < 10:
+            self.boss_bullet = Boss_bullets(self)
+            self.boss_bullets.add(self.boss_bullet)
+            print("a shot has been made!")
+        
     def _update_screen(self):
         #this method is for placing most objects on the screen
         self.screen.fill(self.settings.bg_color)
         self.stars.draw(self.screen)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
-        
+        for boss_bullet_shot in self.boss_bullets.sprites():
+            boss_bullet_shot.draw_bullet()
+            
         self.ship.blitme()
         if self.stats.level % 2 != 0:
             self.aliens.draw(self.screen)
             self.explosion_group.draw(self.screen)
             self.explosion_group.update()
+            
         # draw the score information
         self.sb.show_score()
         #Draw the play button if the game is inactive
@@ -291,18 +307,17 @@ class AlienInvasion:
         else:
             self._update_meteors()
         if self.stats.level % 2 == 0:
+            print("boss explosions animation",self.explosion_group_boss)
             self.boss_group.draw(self.screen)
             if self.boss_is_show:
                 self._boss_spawn()
+            self._boss_bullet_attack()
             self.boss.update()
             self._check_bulets_boss_colision()
         else:
             self.boss_group.empty()
-
-        
         pygame.display.flip()
     def _ship_hit(self):
-
         """respond to the ship being hit by an alien."""
         if self.stats.ships_left > 0:
             #decrement ships_left

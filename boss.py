@@ -30,11 +30,11 @@ class Boss(Sprite):
     def update(self):
         """move the alien to the right or left."""
         #self.x += self.settings.alien_speed
-        if self.rect.x <= 100:
+        if self.rect.x <= 200:
             self.settings.boss_speed = -2.0
             print("movement to the right",self.settings.boss_speed)
             #self.direction = True
-        elif self.rect.x >= 1600:
+        elif self.rect.x >= 1000:
             self.settings.boss_speed = 2.0
             print("movement to the left",self.settings.boss_speed)
         print("movement",self.settings.boss_speed)
