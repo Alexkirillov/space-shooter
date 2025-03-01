@@ -33,20 +33,11 @@ class Boss(Sprite):
             self.settings.boss_speed = -2.0
             print("movement to the right",self.settings.boss_speed)
             #self.direction = True
-<<<<<<< HEAD
-        elif self.rect.x >= 1000:
-=======
         elif self.rect.x >= 1100: #! problem 1
->>>>>>> d414c200c0ab1e28a698512621c4df001fee0350
             self.settings.boss_speed = 2.0
             print("movement to the left",self.settings.boss_speed)
         print("movement",self.settings.boss_speed)
         print(self.rect.x)
-            #self.direction = False
-        #if self.direction == True:
-            #self.boss_speed = 2.0
-        #elif self.direction == False:
-            #self.boss_speed = -2.0
         self.x += self.settings.boss_speed * self.settings.fleet_direction
         self.rect.x = self.x
     

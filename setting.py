@@ -21,7 +21,7 @@ class Settings:
         self.fleet_drop_speed = 10
         self.img = "img"
         self.meteor_img = "meteor_img"
-        self.boss_img = "boss.exp"
+        self.boss_img = "boss_exp"
         #meteor speed
         #self.meteor_speed = randint(1,4)
         # fleet_direction of 1 represents right; -1 represents left

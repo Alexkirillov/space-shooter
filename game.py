@@ -57,11 +57,7 @@ class AlienInvasion:
         self.meteor_group = pygame.sprite.Group()
         self.boss_group = pygame.sprite.Group()
         self.explosion_group_boss = pygame.sprite.Group()
-<<<<<<< HEAD
         self.boss_bullets = pygame.sprite.Group()
-        
-=======
->>>>>>> d414c200c0ab1e28a698512621c4df001fee0350
         #START alien invasion in an inactive state
         self.game_active = False
         #make the play button
@@ -70,7 +66,6 @@ class AlienInvasion:
         self._create_fleet_()
         self._stars()
         self._meteor_obstacle()
-        
     def _create_fleet_(self):
         """create a fleet of aliens"""
         #create an alien and keep ading aliens intil there is no room left
@@ -107,15 +102,12 @@ class AlienInvasion:
         self._check_aliens_bottom()
 
     def _boss_explosion(self):
-<<<<<<< HEAD
         if self.boss.boss_hp <= 0:
             self.explosion = Explosion(self.boss.rect.centerx,self.boss.rect.centery, self.settings.boss_img)
             self.explosion_group_boss.add(self.explosion)
-=======
         self.explosions = Explosion(self.boss.rect.centerx,self.boss.rect.centery, self.settings.boss_img)
         self.explosion_group_boss.add(self.explosions)
 
->>>>>>> d414c200c0ab1e28a698512621c4df001fee0350
     def _update_meteors(self):
         self.meteor_group.draw(self.screen)
         collide_meteor = pygame.sprite.spritecollide(self.ship,self.meteor_group,True)
@@ -186,13 +178,8 @@ class AlienInvasion:
             new_star.rect.x = randint(1,1980)
             new_star.rect.y = randint(1,1000)
             self.stars.add(new_star) 
-<<<<<<< HEAD
-    def _update_bullets(self):
         
-=======
-
     def _update_bullets(self):
->>>>>>> d414c200c0ab1e28a698512621c4df001fee0350
         """update position of bullets and get rid of old bullets"""
         # update bullet position.
         self.bullets.update()
@@ -213,11 +200,7 @@ class AlienInvasion:
         self.boss = Boss(self)
         self.boss_group.add(self.boss)
         self.boss_is_show = False
-<<<<<<< HEAD
-    
-=======
-        
->>>>>>> d414c200c0ab1e28a698512621c4df001fee0350
+
     def _check_bulets_boss_colision(self):
         collisions = pygame.sprite.groupcollide(self.bullets, self.boss_group, True, False)  
         if collisions and self.boss.boss_hp > 0:
@@ -298,34 +281,26 @@ class AlienInvasion:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
             self.shot.play()
-<<<<<<< HEAD
+
     def _boss_bullet_attack(self):
         if len(self.boss_bullets) < 10:
             self.boss_bullet = Boss_bullets(self)
             self.boss_bullets.add(self.boss_bullet)
             print("a shot has been made!")
         
-=======
-
->>>>>>> d414c200c0ab1e28a698512621c4df001fee0350
     def _update_screen(self):
         #this method is for placing most objects on the screen
         self.screen.fill(self.settings.bg_color)
         self.stars.draw(self.screen)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
-<<<<<<< HEAD
         for boss_bullet_shot in self.boss_bullets.sprites():
             boss_bullet_shot.draw_bullet()
-            
-=======
->>>>>>> d414c200c0ab1e28a698512621c4df001fee0350
         self.ship.blitme()
         if self.stats.level % 2 != 0:
             self.aliens.draw(self.screen)
             self.explosion_group.draw(self.screen)
             self.explosion_group.update()
-            
         # draw the score information
         self.sb.show_score()
         #Draw the play button if the game is inactive
@@ -339,17 +314,14 @@ class AlienInvasion:
             if self.boss_is_show:
                 self._boss_spawn()
             self._boss_bullet_attack()
-            self.boss.update()
+            self.boss_group.update()
             self._check_bulets_boss_colision()
             self.explosion_group_boss.draw(self.screen) #! ploblem 3 - draw explosion 
             self.explosion_group_boss.update()
         else:
             self.boss_group.empty()
         pygame.display.flip()
-<<<<<<< HEAD
-=======
 
->>>>>>> d414c200c0ab1e28a698512621c4df001fee0350
     def _ship_hit(self):
         """respond to the ship being hit by an alien."""
         if self.stats.ships_left > 0:
