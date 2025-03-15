@@ -20,7 +20,7 @@ class Boss(Sprite):
         print(self.rect.x,self.rect.y)
         #store the aliens exact horizontal position
         self.x = float(self.rect.x)
-
+        self.boss_speed = 2.0
     def check_edges(self):
         """return true if alien is at the edge of the screen"""
         screen_rect = self.screen.get_rect()
@@ -29,15 +29,16 @@ class Boss(Sprite):
     def update(self):
         """move the alien to the right or left."""
         #self.x += self.settings.alien_speed
-        if self.rect.x <= 200:
-            self.settings.boss_speed = -2.0
-            print("movement to the right",self.settings.boss_speed)
+        if self.rect.x <= 0:
+            self.boss_speed = -2.0
+            print("movement to the right",self.boss_speed)
             #self.direction = True
-        elif self.rect.x >= 1100: #! problem 1
-            self.settings.boss_speed = 2.0
-            print("movement to the left",self.settings.boss_speed)
-        print("movement",self.settings.boss_speed)
-        print(self.rect.x)
-        self.x += self.settings.boss_speed * self.settings.fleet_direction
+        elif self.rect.x >= 1980: #! problem 1
+            self.boss_speed = 2.0
+            print("movement to the left",self.boss_speed)
+        print("movement",self.boss_speed)
+        print(self.rect.x,"this is the x coordinate")
+
+        self.x += self.boss_speed * self.settings.fleet_direction
         self.rect.x = self.x
     

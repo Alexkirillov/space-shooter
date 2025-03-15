@@ -15,7 +15,9 @@ class Scoreboard:
         self.new_high_score = False
         #font settings for scoring information
         self.text_color = (255,255,255)
-        self.font = pygame.font.SysFont(None, 48)
+        self.font = pygame.font.SysFont(None, 100)
+        self.loss_line = self.font.render("you lose :(", True, self.text_color)
+        #self.boss_defeat = self
         #prepare the initial score image
         #prepare the initial score images
         self.prep_score()
@@ -32,7 +34,8 @@ class Scoreboard:
         self.score_rect = self.score_image.get_rect()
         self.score_rect.right = self.screen_rect.right -20
         self.score_rect.top = 20
-
+    
+    
     def show_score(self):
         """draw level score and ships on the screen"""
         self.screen.blit(self.score_image, self.score_rect)

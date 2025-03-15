@@ -41,6 +41,9 @@ class AlienInvasion:
         self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
         self.settings.screen_whith = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
+        self.font1 = pygame.font.SysFont("Arial", 60)
+        self.loss_line = self.font1.render("you lose :(",True, (255,0,0))
+        self.winner_line = self.font1.render("you win !!! (press q to restart)",True,(255,0,0))
         pygame.display.set_caption("Alien Invasion")
         #makes boss inactive
         self.boss_is_show = False
@@ -58,6 +61,7 @@ class AlienInvasion:
         self.boss_group = pygame.sprite.Group()
         self.explosion_group_boss = pygame.sprite.Group()
         self.boss_bullets = pygame.sprite.Group()
+        self.spaceship = pygame.sprite.Group()
         #START alien invasion in an inactive state
         self.game_active = False
         #make the play button
@@ -137,6 +141,8 @@ class AlienInvasion:
             self.game_active = False
             pygame.mouse.set_visible(True)
             self.lost_game.play()
+            
+            
 
     def _check_fleet_edges(self):
         """respnd appropriately if any aliens have reached the edge"""
@@ -190,7 +196,7 @@ class AlienInvasion:
                 self.bullets.remove(bullet)
 
         for boss_bullet_shot in self.boss_bullets.copy():
-            if boss_bullet_shot.rect.bottom >= 1000:
+            if boss_bullet_shot.rect.bottom >= 1200:
                 self.boss_bullets.remove(boss_bullet_shot)
         self._check_bullet_alien_collisions()
         self._check_meteor_bullet_colisions()
@@ -211,10 +217,18 @@ class AlienInvasion:
             self.boss_group.empty()
             self.explosion_group_boss.draw(self.screen)
             self.explosion_group_boss.update()
+            self._win()
+            self.game_active = False
+            pygame.mouse.set_visible(True)
+
     
     def _check_meteor_bullet_colisions(self):
         bullet_meteor_colisions = pygame.sprite.groupcollide(self.bullets,self.meteor_group,True, False)
-
+    def _ship_boss_bullet_colission(self):
+        self.spaceship.add(self.ship)
+        ship_boss_colision = pygame.sprite.groupcollide(self.spaceship,self.boss_bullets,False,True) 
+        if ship_boss_colision:
+            self._ship_hit_meteor()
     def _check_bullet_alien_collisions(self):
          #check for any bullets that hit aliens
         #if so get rid of the bullet and the alien
@@ -241,7 +255,7 @@ class AlienInvasion:
                 self.Al_death.play()
             self.sb.prep_score()
             self.sb.check_high_score()
-
+    
     def _check_events(self):
         """respond to keypresses and mouse events."""
         for event in pygame.event.get():
@@ -283,7 +297,7 @@ class AlienInvasion:
             self.shot.play()
 
     def _boss_bullet_attack(self):
-        if len(self.boss_bullets) < 10:
+        if len(self.boss_bullets) < 1:
             self.boss_bullet = Boss_bullets(self)
             self.boss_bullets.add(self.boss_bullet)
             print("a shot has been made!")
@@ -316,10 +330,15 @@ class AlienInvasion:
             self._boss_bullet_attack()
             self.boss_group.update()
             self._check_bulets_boss_colision()
+            self._ship_boss_bullet_colission()
             self.explosion_group_boss.draw(self.screen) #! ploblem 3 - draw explosion 
             self.explosion_group_boss.update()
         else:
             self.boss_group.empty()
+            
+        if self.game_active == False and self.stats.ships_left < 1:
+            self._game_over()
+
         pygame.display.flip()
 
     def _ship_hit(self):
@@ -330,9 +349,11 @@ class AlienInvasion:
             self.sb.prep_ships() 
             self.hit.set_volume(0.05)
             self.hit.play()
+
             #get rid of any remaining bullets and aliens
             self.bullets.empty()
             self.aliens.empty()
+            self.boss_bullets.empty()
             #create a new fleet and center the ship
             if self.stats.level % 2 != 0:
                 self._create_fleet()
@@ -342,7 +363,9 @@ class AlienInvasion:
         else:
             self.game_active = False
             pygame.mouse.set_visible(True)
-            self.lost_game.play()
+           
+            
+            
 
     def _check_play_button(self, mouse_pos):
         """start a new game when the player clicks play"""
@@ -373,19 +396,25 @@ class AlienInvasion:
                 #treat this the same as if thhe ship got hit
                 self._ship_hit()
                 break
-
+    def _game_over(self):
+        self.screen.blit(self.loss_line,(800,600))
+    def _win(self):
+        self.screen.blit(self.winner_line,(800,600))
     def run_game(self):
         while True:
             self._check_events()
             if self.game_active:
+                
                 self.meteor_group.update()
                 self.ship.update()
                 self._update_bullets()
+                
                 if self.stats.level % 2 != 0:
                     self._update_aliens()
                 else:
                     self.aliens.empty()
             self._update_screen()
+           
             self.clock.tick(60)
 
 if __name__ == "__main__":
