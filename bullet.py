@@ -42,7 +42,7 @@ class Boss_bullets(Sprite):
     def update(self):
         """move the bullet up the screen"""
         #update the exact position of the bullet
-        self.y += self.settings.bullet_speed
+        self.y += self.settings.boss_bullet_Speed
         # Update the rect position
         self.rect.y = self.y
     def draw_bullet(self):

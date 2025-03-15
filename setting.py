@@ -40,7 +40,8 @@ class Settings:
         self.alien_speed = 1.0
         #self.boss_speed = 2.0 
         self.alien_points = 50
-        self.bullets_allowed = 5000
+        self.bullets_allowed = 3
+        self.boss_bullet_Speed = 8
 
         #fleet_directin of 1 represents right and -1 represents left
         self.fleet_direction = 1

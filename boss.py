@@ -13,7 +13,7 @@ class Boss(Sprite):
         """transform.scale method for changing images size"""
         self.image = pygame.transform.scale(pygame.image.load("images/boss.png"),(280,150))
         self.rect = self.image.get_rect()
-        self.boss_hp = 5
+        self.boss_hp = 50
         # start each new alien near the top left of the screen
         self.rect.x = self.rect.width
         self.rect.y = self.rect.height
@@ -33,7 +33,7 @@ class Boss(Sprite):
             self.boss_speed = -2.0
             print("movement to the right",self.boss_speed)
             #self.direction = True
-        elif self.rect.x >= 1980: #! problem 1
+        elif self.rect.x >= 1500: #! problem 1
             self.boss_speed = 2.0
             print("movement to the left",self.boss_speed)
         print("movement",self.boss_speed)

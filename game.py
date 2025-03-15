@@ -297,7 +297,7 @@ class AlienInvasion:
             self.shot.play()
 
     def _boss_bullet_attack(self):
-        if len(self.boss_bullets) < 1:
+        if len(self.boss_bullets) < 3:
             self.boss_bullet = Boss_bullets(self)
             self.boss_bullets.add(self.boss_bullet)
             print("a shot has been made!")
