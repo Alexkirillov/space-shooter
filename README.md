@@ -11,3 +11,5 @@ Game rules:
 8.you have 4 lives
 9.defeat the boss
 10.and press "q" to exit
+
+download 7z archive for Windows (https://github.com/Alexkirillov/space-shooter/blob/main/alien%20final%20game.7z)
