@@ -13,3 +13,4 @@ Game rules:
 10.and press "q" to exit
 
 download 7z archive for Windows (https://github.com/Alexkirillov/space-shooter/blob/main/alien%20final%20game.7z)
+download zip archive for Windows(https://github.com/Alexkirillov/space-shooter/blob/main/alien%20final%20game.zip)
